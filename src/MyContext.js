@@ -3,22 +3,35 @@ import React from 'react';
 const MyContext = React.createContext('myContext');
 
 export class Provider extends React.Component {
-  state = {
-    viewer: null,
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      context: {
+        viewer: null,
+        logIn: this.logIn,
+        logOut: this.logOut,
+      }
+    }
   }
 
-  logIn = name => this.setState({ viewer: name });
+  logIn = name => this.setState({
+    context: {
+      ...this.state.context,
+      viewer: name
+    }}
+  );
 
-  logOut = () => this.setState({ viewer: null });
+  logOut = () => this.setState({
+    context: {
+      ...this.state.context,
+      viewer: null
+    }
+  });
 
   render() {
     return (
       <MyContext.Provider
-        value={{
-          viewer: this.state.viewer,
-          logIn: this.logIn,
-          logOut: this.logOut,
-        }}
+        value={this.state.context}
       >
         {this.props.children}
       </MyContext.Provider>
